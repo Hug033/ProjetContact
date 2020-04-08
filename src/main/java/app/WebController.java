@@ -1,5 +1,6 @@
 package app;
 
+import app.form.ContactForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,22 @@ public class WebController implements WebMvcConfigurer {
     @GetMapping("/")
     public String showForm() {
         return "index";
+    }
+
+    @GetMapping("/add")
+    public String showForm(ContactForm contactForm) {
+        return "form";
+    }
+
+    @PostMapping("/add")
+    public String checkPersonInfo(@Valid ContactForm contactForm, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return "form";
+        }
+
+
+        return "redirect:/results";
     }
 
 

@@ -1,0 +1,21 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<body>
+<form action="#" th:action="@{/add}" th:object="${contactForm}" method="post">
+    <table>
+        <tr>
+            <td>Firstname:</td>
+            <td><input type="text" th:field="*{firstName}" /></td>
+            <td th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">FirstName Error</td>
+        </tr>
+        <tr>
+            <td>Lastname:</td>
+            <td><input type="text" th:field="*{lastName}" /></td>
+            <td th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">LasttName Error</td>
+        </tr>
+        <tr>
+            <td><button type="submit" >Submit</button></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
