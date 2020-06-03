@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Projet Contact</title>
+    <title>Détails de </title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
@@ -25,31 +25,12 @@
                 </ul>
             </div>
         </nav>
-        <div id="container">
-            <table class="table w-75 m-auto">
-                <thead class="thead-dark">
-                <tr>
-                    <th scope="col">Identifiant</th>
-                    <th scope="col">Prénom</th>
-                    <th scope="col">Nom</th>
-                    <th scope="col">Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="e : ${allContactList}">
-                        <th scope="row" th:text="${e.getId()}"></td>
-                        <td th:text="${e.getFirstName()}"></td>
-                        <td th:text="${e.getLastName()}">@mdo</td>
-                        <td>
-                            <a th:href="@{${'/user/' + e.getId()}}">
-                                <button type="button" class="btn btn-dark">Détails</button>
-                            </a>
-                            <button type="button" class="btn btn-dark">Modifier</button>
-                            <button type="button" class="btn btn-dark">Supprimer</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div id="container" class="d-flex justify-content-center">
+            <div>
+                <img th:src="${contact.getLinkImage()}" style="max-width:20vw;">
+                <h3 th:text="${contact.getFirstName()} + ' ' + ${contact.getLastName()}" class="mb-5"></h3>
+                <h4 th:text="${contact.getPhone()} + ' ' + ${contact.getCivility()}" class="mb-5"></h4>
+            </div>
         </div>
     </body>
 </html>

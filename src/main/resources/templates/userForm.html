@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Projet Contact - Ajout d'un utilisateur</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5">
+            <a class="navbar-brand" href="/">Projet Contact</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Liste des contacts <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/add">Ajouter un contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Export en XML</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div id="container" class="d-flex justify-content-center">
+            <form action="#" th:action="@{/add}" th:object="${contactForm}" method="post">
+                <table>
+                    <tr>
+                        <td>
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Prénom</span>
+                                </div>
+                                <input class="form-control" type="text" th:field="*{firstName}"/>
+                            </div>
+                        </td>
+                        <td th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Nom</span>
+                                </div>
+                                <input class="form-control" type="text" th:field="*{lastName}"/>
+                            </div>
+                        </td>
+                        <td th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Téléphone</span>
+                                </div>
+                                <input class="form-control" type="text" th:field="*{phone}"/>
+                            </div>
+                        </td>
+                        <td th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select th:field="*{civility}" class="form-control form-control-sm">
+                                <option value="nothing" disabled selected>Sélectionnez votre civilité</option>
+                                <option value="Homme">Homme</option>
+                                <option value="Femme">Femme</option>
+                            </select>
+                        <br/>
+                        <td th:if="${#fields.hasErrors('civility')}" th:errors="*{civility}"></td>
+                    </tr>
+                    <tr>
+                    <td>
+                        <div class="input-group input-group-sm mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Lien vers l'image de profil</span>
+                            </div>
+                            <input class="form-control" type="text" th:field="*{linkImage}"/>
+                        </div>
+                    </td>
+                    <td th:if="${#fields.hasErrors('linkImage')}" th:errors="*{linkImage}"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="submit" class="btn btn-dark">Ajouter l'utilisateur</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </body>
+</html>

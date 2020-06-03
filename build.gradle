@@ -13,6 +13,7 @@ configurations {
     runtimeClasspath {
         extendsFrom developmentOnly
     }
+
 }
 
 repositories {

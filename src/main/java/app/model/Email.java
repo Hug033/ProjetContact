@@ -17,14 +17,15 @@ public class Email {
 
     protected Email() {}
 
-    public Email(String email) {
+    public Email(String email, Contact contact) {
         this.email = email;
+        this.contact = contact;
     }
 
     @Override
     public String toString() {
         return String.format(
-                "Adress[id=%d, line_1='%s', line_2='%s', postalCode='%s', city='%s']",
+                "Adress[id=%d, email='%s']",
                 id, email);
     }
 
@@ -32,7 +33,7 @@ public class Email {
         return id;
     }
 
-    public String getLine_1() {
+    public String getEmail() {
         return email;
     }
 

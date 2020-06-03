@@ -11,6 +11,9 @@ public class Contact {
     private Long id;
     private String firstName;
     private String lastName;
+    private String phone;
+    private String civility;
+    private String linkImage;
 
     @ManyToMany
     @JoinTable(name="ADDRESSES")
@@ -21,9 +24,12 @@ public class Contact {
 
     protected Contact() {}
 
-    public Contact(String firstName, String lastName) {
+    public Contact(String firstName, String lastName, String phone, String civility, String linkImage) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.phone = phone;
+        this.civility = civility;
+        this.linkImage = linkImage;
     }
 
     @Override
@@ -44,6 +50,16 @@ public class Contact {
     public String getLastName() {
         return lastName;
     }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public String getCivility() {
+        return civility;
+    }
+
+    public String getLinkImage() { return linkImage; }
 
     public Collection<Adress> getAdresses() { return adresses; }
 
