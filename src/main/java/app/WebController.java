@@ -33,14 +33,26 @@ public class WebController implements WebMvcConfigurer {
         return "index";
     }
 
-    @DeleteMapping("/user/{id}")
+    @GetMapping("/user/delete/{id}")
     public String deleteUser(@PathVariable long id) {
         repo.deleteById(id);
         return "redirect:/";
     }
 
+    @GetMapping("/user/edit/{id}")
+    public String editUser(@PathVariable long id, Model model, ContactForm contactForm) {
+        Contact temp = repo.findById(id);
+        contactForm.setFirstName(temp.getFirstName());
+        contactForm.setLastName(temp.getLastName());
+        contactForm.setCivility(temp.getCivility());
+        contactForm.setLinkImage(temp.getLinkImage());
+        contactForm.setPhone(temp.getPhone());
+        contactForm.setId(temp.getId());
+        return "userForm";
+    }
+
     @GetMapping("/user/{id}")
-    public String getUserDetail(@PathVariable long id, Model model, EmailForm emailForm) {
+    public String getUserDetail(@PathVariable long id, Model model) {
         model.addAttribute("contact", repo.findById(id));
         return "user";
     }
@@ -50,8 +62,27 @@ public class WebController implements WebMvcConfigurer {
         return "userForm";
     }
 
+    @PostMapping("/edit/{id}")
+    public String editUser(@PathVariable long id, @Valid ContactForm contactForm, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return "userForm";
+        }
+
+        System.out.println(id);
+        Contact contactToEdit = repo.findById(contactForm.getId());
+        contactToEdit.setFirstName(contactForm.getFirstName());
+        contactToEdit.setLastName(contactForm.getLastName());
+        contactToEdit.setCivility(contactForm.getCivility());
+        contactToEdit.setLinkImage(contactForm.getLinkImage());
+        contactToEdit.setPhone(contactForm.getPhone());
+        repo.save(contactToEdit);
+
+        return "redirect:/user/" + id;
+    }
+
     @PostMapping("/add")
-    public String addContact(@Valid ContactForm contactForm, BindingResult bindingResult) {
+    public String addUser(@Valid ContactForm contactForm, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return "userForm";

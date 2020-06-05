@@ -61,6 +61,26 @@ public class Contact {
 
     public String getLinkImage() { return linkImage; }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setCivility(String civility) {
+        this.civility = civility;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setLinkImage(String linkImage) {
+        this.linkImage = linkImage;
+    }
+
     public Collection<Adress> getAdresses() { return adresses; }
 
     public Collection<Email> getEmails() { return emails; }

@@ -44,8 +44,12 @@
                             <a th:href="@{${'/user/' + e.getId()}}">
                                 <button type="button" class="btn btn-dark">Détails</button>
                             </a>
-                            <button type="button" class="btn btn-dark">Modifier</button>
-                            <button type="button" class="btn btn-dark">Supprimer</button>
+                            <a th:href="@{${'/user/edit/' + e.getId()}}">
+                                <button type="button" class="btn btn-dark">Modifier</button>
+                            </a>
+                            <a th:href="@{${'/user/delete/' + e.getId()}}">
+                                <button type="button" class="btn btn-dark">Supprimer</button>
+                            </a>
                         </td>
                     </tr>
                 </tbody>

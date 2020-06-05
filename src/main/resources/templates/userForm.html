@@ -28,7 +28,7 @@
             </div>
         </nav>
         <div id="container" class="d-flex justify-content-center">
-            <form action="#" th:action="@{/add}" th:object="${contactForm}" method="post">
+            <form action="#" th:action="${ contactForm.getId() != 0 } ? @{/edit/} + ${contactForm.getId()}: @{/add}" th:object="${contactForm}" method="post">
                 <table>
                     <tr>
                         <td>

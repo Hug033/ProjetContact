@@ -6,6 +6,8 @@ import javax.validation.constraints.Size;
 
 public class ContactForm {
 
+    private long id;
+
     @NotNull
     @Size(min=2, max=30)
     private String firstName;
@@ -22,6 +24,10 @@ public class ContactForm {
         return this.firstName;
     }
 
+    public long getId() {
+        return this.id;
+    }
+
     public String getLastName() {
         return this.lastName;
     }
@@ -36,6 +42,10 @@ public class ContactForm {
 
     public String getLinkImage() {
         return this.linkImage;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public void setFirstName(String firstName) {
