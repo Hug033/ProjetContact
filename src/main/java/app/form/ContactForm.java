@@ -3,6 +3,7 @@ package app.form;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 public class ContactForm {
 
@@ -15,6 +16,7 @@ public class ContactForm {
     private String civility;
     private String phone;
     private String linkImage;
+    private String email;
 
     @NotNull
     @Size(min=2, max=30)

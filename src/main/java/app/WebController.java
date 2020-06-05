@@ -52,7 +52,7 @@ public class WebController implements WebMvcConfigurer {
     }
 
     @GetMapping("/user/{id}")
-    public String getUserDetail(@PathVariable long id, Model model) {
+    public String getUserDetail(@PathVariable long id, Model model, EmailForm emailForm) {
         model.addAttribute("contact", repo.findById(id));
         return "user";
     }
@@ -82,7 +82,7 @@ public class WebController implements WebMvcConfigurer {
     }
 
     @PostMapping("/add")
-    public String addUser(@Valid ContactForm contactForm, BindingResult bindingResult) {
+    public String addUser(@Valid ContactForm contactForm, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
             return "userForm";
@@ -91,6 +91,20 @@ public class WebController implements WebMvcConfigurer {
         Contact temp = new Contact(contactForm.getFirstName(), contactForm.getLastName(), contactForm.getPhone(), contactForm.getCivility(), contactForm.getLinkImage());
         repo.save(temp);
         //repoEmail.save(new Email("hugo@hugo.com", temp));
+
+        return "redirect:/user/" + temp.getId();
+    }
+
+    @PostMapping("/add/email/{id}")
+    public String addEmail(@PathVariable long id, @Valid EmailForm emailForm, BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("contact", repo.findById(id));
+            return "user";
+        }
+
+        Contact temp = repo.findById(id);
+        repoEmail.save(new Email(emailForm.getEmail(), temp));
 
         return "redirect:/user/" + temp.getId();
     }

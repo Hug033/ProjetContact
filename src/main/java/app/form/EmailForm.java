@@ -17,16 +17,16 @@ public class EmailForm {
         return this.email;
     }
 
-    public void setFirstName(String email) {
-        this.email = email;
-    }
-
     public long getContact() {
         return this.contact;
     }
 
     public void setContact(long contact) {
         this.contact = contact;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String toString() {

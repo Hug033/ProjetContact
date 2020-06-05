@@ -25,12 +25,38 @@
                 </ul>
             </div>
         </nav>
-        <div id="container" class="d-flex justify-content-center">
-            <div>
-                <img th:src="${contact.getLinkImage()}" style="max-width:20vw;">
-                <h3 th:text="${contact.getFirstName()} + ' ' + ${contact.getLastName()}" class="mb-5"></h3>
-                <h4 th:text="${contact.getPhone()} + ' ' + ${contact.getCivility()}" class="mb-5"></h4>
+        <div id="container">
+            <div class="row m-2">
+                <div class="col-2">
+                    <div>
+                        <img th:src="${contact.getLinkImage()}" style="max-width:250px;">
+                        <h3 class="mb-3" th:text="${contact.getFirstName()} + ' ' + ${contact.getLastName()}"></h3>
+                        <h4 class="d-inline">Téléphone :</h4>
+                        <p class="mb-3" th:text="${contact.getPhone()}"></p>
+                        <br/>
+                        <h4 class="d-inline">Civilité :</h4>
+                        <p class="mb-3" th:text="${contact.getCivility()}"></p>
+                    </div>
+                </div>
+                <div class="col-8">
+                    <table class="table">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Emails de l'utilisateurs</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="e : ${contact.getEmails()}">
+                            <td th:text="${e.getEmail()}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <form action="#" th:action="@{/add/email/} + ${contact.getId()}" th:object="${emailForm}" method="post">
+                        <input class="form-control w-75 d-inline" type="email" th:field="*{email}"/>
+                        <button type="submit" class="btn btn-dark">Ajouter l'email</button>
+                        <h6 style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></h6>
+                    </form>
+                </div>
             </div>
-        </div>
     </body>
 </html>
