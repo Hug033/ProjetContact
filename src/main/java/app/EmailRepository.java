@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface EmailRepository extends CrudRepository<Email, Long> {
 
-    List<Contact> findByEmail(String email);
+    Email findByEmail(String email);
 
     Contact findById(long id);
 }

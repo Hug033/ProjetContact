@@ -81,6 +81,10 @@ public class Contact {
         this.linkImage = linkImage;
     }
 
+    public void setAdresses(Collection<Adress> adresses) { this.adresses = adresses; };
+
+    public void setEmails(Collection<Email> emails) { this.emails = emails; };
+
     public Collection<Adress> getAdresses() { return adresses; }
 
     public Collection<Email> getEmails() { return emails; }

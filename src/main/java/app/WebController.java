@@ -1,7 +1,10 @@
 package app;
 
+import app.form.AdressForm;
+import app.form.AssignForm;
 import app.form.ContactForm;
 import app.form.EmailForm;
+import app.model.Adress;
 import app.model.Contact;
 import app.model.Email;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +16,10 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Controller
@@ -26,15 +31,26 @@ public class WebController implements WebMvcConfigurer {
     @Autowired
     private EmailRepository repoEmail;
 
+    @Autowired
+    private AdressRepository repoAdress;
+
 
     // Les routes
     @GetMapping("/")
-    public String displayAllContact() {
+    public String displayAllContact(Principal principal) {
+        System.out.println(principal);
         return "index";
     }
 
     @GetMapping("/user/delete/{id}")
     public String deleteUser(@PathVariable long id) {
+        Contact temp = repo.findById(id);
+        temp.setAdresses(null);
+        for(Email e: temp.getEmails()) {
+            repoEmail.deleteAll();
+        }
+        temp.setEmails(null);
+        repo.save(temp);
         repo.deleteById(id);
         return "redirect:/";
     }
@@ -52,14 +68,31 @@ public class WebController implements WebMvcConfigurer {
     }
 
     @GetMapping("/user/{id}")
-    public String getUserDetail(@PathVariable long id, Model model, EmailForm emailForm) {
-        model.addAttribute("contact", repo.findById(id));
+    public String getUserDetail(@PathVariable long id, Model model, EmailForm emailForm, AssignForm assignForm) {
+
+        Contact temp = repo.findById(id);
+        List<Adress> adresses = new ArrayList<Adress>();
+        for(Adress adress : repoAdress.findAll())
+        {
+            if(!temp.getAdresses().contains(adress))
+            {
+                adresses.add(adress);
+            }
+        }
+        model.addAttribute("contact", temp);
+        model.addAttribute("adresses", adresses);
+
         return "user";
     }
 
     @GetMapping("/add")
     public String addContact(ContactForm contactForm) {
         return "userForm";
+    }
+
+    @GetMapping("/add/adress")
+    public String addAdress(AdressForm adressForm) {
+        return "adressForm";
     }
 
     @PostMapping("/edit/{id}")
@@ -69,7 +102,6 @@ public class WebController implements WebMvcConfigurer {
             return "userForm";
         }
 
-        System.out.println(id);
         Contact contactToEdit = repo.findById(contactForm.getId());
         contactToEdit.setFirstName(contactForm.getFirstName());
         contactToEdit.setLastName(contactForm.getLastName());
@@ -95,6 +127,18 @@ public class WebController implements WebMvcConfigurer {
         return "redirect:/user/" + temp.getId();
     }
 
+    @PostMapping("/add/adress")
+    public String addAdress(@Valid AdressForm adressForm, BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return "adressForm";
+        }
+
+        repoAdress.save(new Adress(adressForm.getLine_1(), adressForm.getLine_2(), adressForm.getPostalCode(), adressForm.getCity()));
+
+        return "redirect:/";
+    }
+
     @PostMapping("/add/email/{id}")
     public String addEmail(@PathVariable long id, @Valid EmailForm emailForm, BindingResult bindingResult, Model model) {
 
@@ -104,8 +148,30 @@ public class WebController implements WebMvcConfigurer {
         }
 
         Contact temp = repo.findById(id);
-        repoEmail.save(new Email(emailForm.getEmail(), temp));
+        if (repoEmail.findByEmail(emailForm.getEmail()) == null) {
+            repoEmail.save(new Email(emailForm.getEmail(), temp));
+        }
 
+        return "redirect:/user/" + temp.getId();
+    }
+
+    @PostMapping("/assign/adress/{id}")
+    public String assignAdress(@PathVariable long id, @Valid AssignForm assignForm, BindingResult bindingResult, Model model) {
+
+        System.out.println(assignForm.getAdressId());
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("contact", repo.findById(id));
+            model.addAttribute("emailForm", new EmailForm());
+            return "user";
+        }
+
+        Contact temp = repo.findById(id);
+        Long test = assignForm.getAdressIdLong();
+        temp.getAdresses().add(repoAdress.findById(assignForm.getAdressIdLong()));
+        repo.save(temp);
+
+        model.addAttribute("emailForm", new EmailForm());
         return "redirect:/user/" + temp.getId();
     }
 
@@ -124,5 +190,21 @@ public class WebController implements WebMvcConfigurer {
         return result;
     }
 
+    // Les attributs
+    @ModelAttribute("allAdressList")
+    public List<Adress> getAllAdressList() {
+        List<Adress> result = new ArrayList<Adress>();
+        for (Adress adress : repoAdress.findAll()) {
+            result.add(adress);
+        }
+        return result;
+    }
+
+    // Si l'utilisateur est connecté
+    @ModelAttribute("isConnected")
+    public boolean isConnected(Principal prc)
+    {
+        return prc != null;
+    }
 
 }

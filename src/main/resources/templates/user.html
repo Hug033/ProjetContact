@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:c="http://www.thymeleaf.org">
 <head>
     <title>Détails de </title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -20,6 +20,9 @@
                         <a class="nav-link" href="/add">Ajouter un contact</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="/add/adress">Ajouter une adresse</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="#">Export en XML</a>
                     </li>
                 </ul>
@@ -29,7 +32,7 @@
             <div class="row m-2">
                 <div class="col-2">
                     <div>
-                        <img th:src="${contact.getLinkImage()}" style="max-width:250px;">
+                        <img th:src="${contact.getLinkImage()}" style="max-width:250px;max-height:200px">
                         <h3 class="mb-3" th:text="${contact.getFirstName()} + ' ' + ${contact.getLastName()}"></h3>
                         <h4 class="d-inline">Téléphone :</h4>
                         <p class="mb-3" th:text="${contact.getPhone()}"></p>
@@ -38,7 +41,7 @@
                         <p class="mb-3" th:text="${contact.getCivility()}"></p>
                     </div>
                 </div>
-                <div class="col-8">
+                <div class="col-8" style="max-height: 40vh;overflow: auto;">
                     <table class="table">
                         <thead class="thead-dark">
                         <tr>
@@ -52,10 +55,40 @@
                         </tbody>
                     </table>
                     <form action="#" th:action="@{/add/email/} + ${contact.getId()}" th:object="${emailForm}" method="post">
-                        <input class="form-control w-75 d-inline" type="email" th:field="*{email}"/>
+                        <input class="form-control w-75 d-inline" type="email" th:field="*{email}" placeholder="Entrez une adresse mail"/>
                         <button type="submit" class="btn btn-dark">Ajouter l'email</button>
                         <h6 style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></h6>
                     </form>
+                </div>
+
+                <div class="col-12">
+                    <table class="table">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Ligne 1</th>
+                            <th scope="col">Ligne 2</th>
+                            <th scope="col">Code postal</th>
+                            <th scope="col">Ville</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                    <tr th:each="e : ${contact.getAdresses()}">
+                            <td th:text="${e.getLine_1()}"></td>
+                            <td th:text="${e.getLine_2()}"></td>
+                            <td th:text="${e.getPostalCode()}"></td>
+                            <td th:text="${e.getCity()}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div th:if="${adresses != null}">
+                        <form action="#" th:action="@{/assign/adress/} + ${contact.getId()}" th:object="${assignForm}" method="post">
+                            <select th:field="*{adressId}" class="form-control form-control-sm w-75 d-inline">
+                                <option th:each="adress: ${adresses}" th:value="${adress.getId()}" th:text="${adress.getLine_1()} + ' ' + ${adress.getLine_2()} + ' ' + ${adress.getPostalCode()} + ' ' + ${adress.getCity()}"></option>
+                            </select>
+                            <button type="submit" class="btn btn-dark">Ajouter l'adresse à l'utilisateur</button>
+                            <h6 style="color:red" th:if="${#fields.hasErrors('adressId')}" th:errors="*{adressId}"></h6>
+                        </form>
+                    </div>
                 </div>
             </div>
     </body>

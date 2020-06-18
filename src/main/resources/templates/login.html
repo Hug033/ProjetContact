@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:c="http://www.thymeleaf.org">
+    <head>
+        <title>Authentification - Projet Contact</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5">
+            <a class="navbar-brand" href="/">Projet Contact</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </nav>
+        <div id="container" class="container text-center w-25">
+            <form th:action="@{/login}" method="post">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Nom d'utilisateur</span>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Default" name="username" aria-describedby="inputGroup-sizing-default">
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Mot de passe</span>
+                    </div>
+                    <input type="password" class="form-control" aria-label="Default" name="password" aria-describedby="inputGroup-sizing-default">
+                </div>
+                <input type="submit" class="btn btn-dark" value="Se connecter"/><br/>
+            </form>
+            <div class="mt-3 text-danger">
+                <div th:if="${param.error}">
+                    Nom d'utilisateur ou mot de passe incorrect !
+                </div>
+                <div th:if="${param.logout}">
+                    Vous avez été déconnecté !
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

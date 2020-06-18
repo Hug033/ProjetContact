@@ -9,8 +9,7 @@
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5">
             <a class="navbar-brand" href="/">Projet Contact</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -20,6 +19,9 @@
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="/add">Ajouter un contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/add/adress">Ajouter une adresse</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Export en XML</a>
@@ -85,8 +87,8 @@
                     <td th:if="${#fields.hasErrors('linkImage')}" th:errors="*{linkImage}"></td>
                     </tr>
                     <tr>
-                        <td>
-                            <button type="submit" class="btn btn-dark">Ajouter l'utilisateur</button>
+                        <td class="text-center">
+                            <button type="submit" class="btn btn-dark" th:text="${ contactForm.getId() != 0 } ? 'Modifier l\'utilisateur' : 'Ajouter l\'utilisateur'"></button>
                         </td>
                     </tr>
                 </table>
