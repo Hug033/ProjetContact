@@ -1,9 +1,12 @@
 package app.model;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Collection;
 
+@XmlRootElement(name = "address")
 @Entity
 public class Adress implements Serializable {
 
@@ -38,18 +41,22 @@ public class Adress implements Serializable {
         return id;
     }
 
+    @XmlElement
     public String getLine_1() {
         return line_1;
     }
 
+    @XmlElement
     public String getLine_2() {
         return line_2;
     }
 
+    @XmlElement
     public String getPostalCode() {
         return postalCode;
     }
 
+    @XmlElement
     public String getCity() {
         return city;
     }

@@ -13,27 +13,27 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 @Controller
 public class WebController implements WebMvcConfigurer {
 
-    @Autowired
-    private ContactRepository repo;
+    // Les répertoires avec les données
 
     @Autowired
-    private EmailRepository repoEmail;
+    private ContactRepository repo; // Contact
 
     @Autowired
-    private AdressRepository repoAdress;
+    private EmailRepository repoEmail; // Email
+
+    @Autowired
+    private AdressRepository repoAdress; // Adresse
 
 
     // Traitement des requêtes GET
@@ -43,6 +43,7 @@ public class WebController implements WebMvcConfigurer {
         return "index";
     }
 
+    // Gestion de l'API
     @RequestMapping(value = "/xml", produces = MediaType.APPLICATION_XML_VALUE)
     public @ResponseBody ContactList apiXML(@RequestParam String action, @RequestParam(required = false) String id) {
 
@@ -68,7 +69,6 @@ public class WebController implements WebMvcConfigurer {
                 repo.deleteById(Long.parseLong(id));
             }
         }
-
         return null;
     }
 
@@ -127,6 +127,22 @@ public class WebController implements WebMvcConfigurer {
 
     // Traitement des requêtes POST
 
+    // Permet d'ajouter un contact
+    @PostMapping("/add")
+    public String addUser(@Valid ContactForm contactForm, BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return "userForm";
+        }
+
+        Contact temp = new Contact(contactForm.getFirstName(), contactForm.getLastName(), contactForm.getPhone(), contactForm.getCivility(), contactForm.getLinkImage());
+        repo.save(temp);
+        //repoEmail.save(new Email("hugo@hugo.com", temp));
+
+        return "redirect:/user/detail/" + temp.getId();
+    }
+
+    // Permet d'éditer un contact
     @PostMapping("/edit/{id}")
     public String editUser(@PathVariable long id, @Valid ContactForm contactForm, BindingResult bindingResult) {
 
@@ -145,20 +161,7 @@ public class WebController implements WebMvcConfigurer {
         return "redirect:/user/detail/" + id;
     }
 
-    @PostMapping("/add")
-    public String addUser(@Valid ContactForm contactForm, BindingResult bindingResult, Model model) {
-
-        if (bindingResult.hasErrors()) {
-            return "userForm";
-        }
-
-        Contact temp = new Contact(contactForm.getFirstName(), contactForm.getLastName(), contactForm.getPhone(), contactForm.getCivility(), contactForm.getLinkImage());
-        repo.save(temp);
-        //repoEmail.save(new Email("hugo@hugo.com", temp));
-
-        return "redirect:/user/detail/" + temp.getId();
-    }
-
+    // Permet d'ajouter une adresse
     @PostMapping("/add/adress")
     public String addAdress(@Valid AdressForm adressForm, BindingResult bindingResult, Model model) {
 
@@ -171,6 +174,7 @@ public class WebController implements WebMvcConfigurer {
         return "redirect:/add/adress";
     }
 
+    // Permet d'ajouter une adresse mail à un contact
     @PostMapping("/add/email/{id}")
     public String addEmail(@PathVariable long id, @Valid EmailForm emailForm, BindingResult bindingResult, Model model) {
 
@@ -187,6 +191,7 @@ public class WebController implements WebMvcConfigurer {
         return "redirect:/user/detail/" + temp.getId();
     }
 
+    // Permet d'assigner une adresse à un contact
     @PostMapping("/assign/adress/{id}")
     public String assignAdress(@PathVariable long id, @Valid AssignForm assignForm, BindingResult bindingResult, Model model) {
 
@@ -210,6 +215,7 @@ public class WebController implements WebMvcConfigurer {
 
     // Gestion des attributs
 
+    // Permet de récupérer tous les contacts
     @ModelAttribute("allContactList")
     public List<Contact> getAllContactList() {
         List<Contact> result = new ArrayList<Contact>();
@@ -229,7 +235,7 @@ public class WebController implements WebMvcConfigurer {
         return result;
     }
 
-    // Si l'utilisateur est connecté
+    // Permet de savoir si 'lutilisateur est connecté
     @ModelAttribute("isConnected")
     public boolean isConnected(Principal prc)
     {

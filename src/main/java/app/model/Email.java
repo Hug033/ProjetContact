@@ -1,9 +1,12 @@
 package app.model;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Collection;
 
+@XmlRootElement(name = "email")
 @Entity
 public class Email implements Serializable {
 
@@ -34,6 +37,7 @@ public class Email implements Serializable {
         return id;
     }
 
+    @XmlElement
     public String getEmail() {
         return email;
     }

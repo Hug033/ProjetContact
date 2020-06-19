@@ -79,6 +79,12 @@ public class Contact implements Serializable {
     @XmlElement
     public String getLinkImage() { return linkImage; }
 
+    @XmlElement
+    public Collection<Adress> getAdresses() { return adresses; }
+
+    @XmlElement
+    public Collection<Email> getEmails() { return emails; }
+
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -102,8 +108,4 @@ public class Contact implements Serializable {
     public void setAdresses(Collection<Adress> adresses) { this.adresses = adresses; };
 
     public void setEmails(Collection<Email> emails) { this.emails = emails; };
-
-    public Collection<Adress> getAdresses() { return adresses; }
-
-    public Collection<Email> getEmails() { return emails; }
 }
