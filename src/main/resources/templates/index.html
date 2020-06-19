@@ -23,7 +23,7 @@
                         <a class="nav-link" href="/add/adress">Ajouter une adresse</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Export en XML</a>
+                        <a class="nav-link" href="/xml?action=listContacts">Export en XML</a>
                     </li>
                 </ul>
                 <form th:action="@{/logout}" method="post" th:if="${isConnected}" class="form-inline" >
@@ -47,7 +47,7 @@
                         <td th:text="${e.getFirstName()}"></td>
                         <td th:text="${e.getLastName()}">@mdo</td>
                         <td>
-                            <a th:href="@{${'/user/' + e.getId()}}">
+                            <a th:href="@{${'/user/detail/' + e.getId()}}">
                                 <button type="button" class="btn btn-dark">Détails</button>
                             </a>
                             <a th:href="@{${'/user/edit/' + e.getId()}}">

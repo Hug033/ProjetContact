@@ -1,10 +1,11 @@
 package app.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 
 @Entity
-public class Adress {
+public class Adress implements Serializable {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -14,7 +15,7 @@ public class Adress {
     private String postalCode;
     private String city;
 
-    @ManyToMany(mappedBy = "adresses")
+    @ManyToMany(mappedBy = "adresses", cascade = CascadeType.REMOVE)
     private Collection<Contact> contacts;
 
     protected Adress() {}

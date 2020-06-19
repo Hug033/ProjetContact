@@ -8,6 +8,7 @@ import app.model.Adress;
 import app.model.Contact;
 import app.model.Email;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,17 +36,45 @@ public class WebController implements WebMvcConfigurer {
     private AdressRepository repoAdress;
 
 
-    // Les routes
+    // Traitement des requêtes GET
+
     @GetMapping("/")
-    public String displayAllContact(Principal principal) {
-        System.out.println(principal);
+    public String displayAllContact() {
         return "index";
+    }
+
+    @RequestMapping(value = "/xml", produces = MediaType.APPLICATION_XML_VALUE)
+    public @ResponseBody ContactList apiXML(@RequestParam String action, @RequestParam(required = false) String id) {
+
+        if(action.equals("listContacts")) {
+            ContactList list = new ContactList();
+            for(Contact c : repo.findAll()) {
+                list.getContacts().add(c);
+            }
+            return list;
+        } else if (action.equals("getContact") && id != null) {
+            ContactList list = new ContactList();
+            list.getContacts().add(repo.findById(Long.parseLong(id)));
+            return list;
+        } else if(action.equals("delContact") && id != null) {
+            Contact temp = repo.findById(Long.parseLong(id));
+            if(temp != null)
+            {
+                for(Email e: temp.getEmails()) {
+                    repoEmail.deleteAll();
+                }
+                temp.setEmails(null);
+                repo.save(temp);
+                repo.deleteById(Long.parseLong(id));
+            }
+        }
+
+        return null;
     }
 
     @GetMapping("/user/delete/{id}")
     public String deleteUser(@PathVariable long id) {
         Contact temp = repo.findById(id);
-        temp.setAdresses(null);
         for(Email e: temp.getEmails()) {
             repoEmail.deleteAll();
         }
@@ -67,7 +96,7 @@ public class WebController implements WebMvcConfigurer {
         return "userForm";
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/user/detail/{id}")
     public String getUserDetail(@PathVariable long id, Model model, EmailForm emailForm, AssignForm assignForm) {
 
         Contact temp = repo.findById(id);
@@ -95,6 +124,9 @@ public class WebController implements WebMvcConfigurer {
         return "adressForm";
     }
 
+
+    // Traitement des requêtes POST
+
     @PostMapping("/edit/{id}")
     public String editUser(@PathVariable long id, @Valid ContactForm contactForm, BindingResult bindingResult) {
 
@@ -110,7 +142,7 @@ public class WebController implements WebMvcConfigurer {
         contactToEdit.setPhone(contactForm.getPhone());
         repo.save(contactToEdit);
 
-        return "redirect:/user/" + id;
+        return "redirect:/user/detail/" + id;
     }
 
     @PostMapping("/add")
@@ -124,7 +156,7 @@ public class WebController implements WebMvcConfigurer {
         repo.save(temp);
         //repoEmail.save(new Email("hugo@hugo.com", temp));
 
-        return "redirect:/user/" + temp.getId();
+        return "redirect:/user/detail/" + temp.getId();
     }
 
     @PostMapping("/add/adress")
@@ -136,7 +168,7 @@ public class WebController implements WebMvcConfigurer {
 
         repoAdress.save(new Adress(adressForm.getLine_1(), adressForm.getLine_2(), adressForm.getPostalCode(), adressForm.getCity()));
 
-        return "redirect:/";
+        return "redirect:/add/adress";
     }
 
     @PostMapping("/add/email/{id}")
@@ -152,7 +184,7 @@ public class WebController implements WebMvcConfigurer {
             repoEmail.save(new Email(emailForm.getEmail(), temp));
         }
 
-        return "redirect:/user/" + temp.getId();
+        return "redirect:/user/detail/" + temp.getId();
     }
 
     @PostMapping("/assign/adress/{id}")
@@ -172,15 +204,12 @@ public class WebController implements WebMvcConfigurer {
         repo.save(temp);
 
         model.addAttribute("emailForm", new EmailForm());
-        return "redirect:/user/" + temp.getId();
+        return "redirect:/user/detail/" + temp.getId();
     }
 
-    @GetMapping("/results")
-    public String showResult() {
-        return "results";
-    }
 
-    // Les attributs
+    // Gestion des attributs
+
     @ModelAttribute("allContactList")
     public List<Contact> getAllContactList() {
         List<Contact> result = new ArrayList<Contact>();
@@ -190,7 +219,7 @@ public class WebController implements WebMvcConfigurer {
         return result;
     }
 
-    // Les attributs
+    // Permet de récupérer toutes les adresses
     @ModelAttribute("allAdressList")
     public List<Adress> getAllAdressList() {
         List<Adress> result = new ArrayList<Adress>();

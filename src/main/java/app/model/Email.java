@@ -1,10 +1,11 @@
 package app.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 
 @Entity
-public class Email {
+public class Email implements Serializable {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)

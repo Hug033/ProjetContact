@@ -1,18 +1,30 @@
 package app.model;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 import java.util.Collection;
 
+@XmlRootElement(name = "contact")
 @Entity
-public class Contact {
+public class Contact implements Serializable {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
+
     private String firstName;
+
     private String lastName;
+
     private String phone;
+
     private String civility;
+
     private String linkImage;
 
     @ManyToMany
@@ -39,26 +51,32 @@ public class Contact {
                 id, firstName, lastName);
     }
 
+    @XmlElement
     public Long getId() {
         return id;
     }
 
+    @XmlElement
     public String getFirstName() {
         return firstName;
     }
 
+    @XmlElement
     public String getLastName() {
         return lastName;
     }
 
+    @XmlElement
     public String getPhone() {
         return phone;
     }
 
+    @XmlElement
     public String getCivility() {
         return civility;
     }
 
+    @XmlElement
     public String getLinkImage() { return linkImage; }
 
     public void setFirstName(String firstName) {
