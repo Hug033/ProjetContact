@@ -80,7 +80,6 @@
                     <th scope="col">Ligne 2</th>
                     <th scope="col">Code postal</th>
                     <th scope="col">Ville</th>
-                    <th scope="col">Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -89,9 +88,6 @@
                     <td th:text="${e.getLine_2()}"></td>
                     <td th:text="${e.getPostalCode()}"></td>
                     <td th:text="${e.getCity()}"></td>
-                    <td>
-                        <a th:href="${'/adress/delete/' + e.getId()}">Supprimer</a>
-                    </td>
                 </tr>
                 </tbody>
             </table>
