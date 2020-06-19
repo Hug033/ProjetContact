@@ -2,8 +2,6 @@ package app;
 
 import app.form.AssignForm;
 import app.model.Adress;
-import app.model.Contact;
-import app.model.Email;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

@@ -84,6 +84,7 @@
                         </tbody>
                     </table>
                     <div th:if="${isConnected}">
+                        Pour ajouter une adresse vous devez en ajouter <a href="/add/adress">ICI</a>
                         <form action="#" th:action="@{/assign/adress/} + ${contact.getId()}" th:object="${assignForm}" method="post">
                             <select th:field="*{adressId}" class="form-control form-control-sm w-75 d-inline">
                                 <option th:each="adress: ${adresses}" th:value="${adress.getId()}" th:text="${adress.getLine_1()} + ' ' + ${adress.getLine_2()} + ' ' + ${adress.getPostalCode()} + ' ' + ${adress.getCity()}"></option>
