@@ -18,7 +18,7 @@ public class Adress implements Serializable {
     private String postalCode;
     private String city;
 
-    @ManyToMany(mappedBy = "adresses", cascade = CascadeType.REMOVE)
+    @ManyToMany(mappedBy = "adresses", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Collection<Contact> contacts;
 
     protected Adress() {}

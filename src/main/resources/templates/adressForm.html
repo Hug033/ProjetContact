@@ -30,6 +30,9 @@
             <form th:action="@{/logout}" method="post" th:if="${isConnected}" class="form-inline" >
                 <input class="form-control btn btn-outline-light" type="submit" value="Se déconnecter"/>
             </form>
+            <form th:action="@{/login}" th:if="${!isConnected}" class="form-inline" >
+                <input class="form-control btn btn-outline-light" type="submit" value="Se connecter"/>
+            </form>
         </div>
     </nav>
         <div id="container" class="container text-center">
@@ -77,14 +80,18 @@
                     <th scope="col">Ligne 2</th>
                     <th scope="col">Code postal</th>
                     <th scope="col">Ville</th>
+                    <th scope="col">Action</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="e : ${allAdressList}">
                     <td th:text="${e.getLine_1()}"></td>
-                    <td th:text="${e.getLine_2()}">@mdo</td>
-                    <td th:text="${e.getPostalCode()}">@mdo</td>
-                    <td th:text="${e.getCity()}">@mdo</td>
+                    <td th:text="${e.getLine_2()}"></td>
+                    <td th:text="${e.getPostalCode()}"></td>
+                    <td th:text="${e.getCity()}"></td>
+                    <td>
+                        <a th:href="${'/adress/delete/' + e.getId()}">Supprimer</a>
+                    </td>
                 </tr>
                 </tbody>
             </table>

@@ -29,6 +29,9 @@
                 <form th:action="@{/logout}" method="post" th:if="${isConnected}" class="form-inline" >
                     <input class="form-control btn btn-outline-light" type="submit" value="Se déconnecter"/>
                 </form>
+                <form th:action="@{/login}" th:if="${!isConnected}" class="form-inline" >
+                    <input class="form-control btn btn-outline-light" type="submit" value="Se connecter"/>
+                </form>
             </div>
         </nav>
         <div id="container">
@@ -47,13 +50,13 @@
                         <td th:text="${e.getFirstName()}"></td>
                         <td th:text="${e.getLastName()}">@mdo</td>
                         <td>
-                            <a th:href="@{${'/user/detail/' + e.getId()}}">
+                            <a th:href="@{${'/contact/detail/' + e.getId()}}">
                                 <button type="button" class="btn btn-dark">Détails</button>
                             </a>
-                            <a th:href="@{${'/user/edit/' + e.getId()}}">
+                            <a th:href="@{${'/contact/edit/' + e.getId()}}">
                                 <button type="button" class="btn btn-dark">Modifier</button>
                             </a>
-                            <a th:href="@{${'/user/delete/' + e.getId()}}">
+                            <a th:href="@{${'/contact/delete/' + e.getId()}}">
                                 <button type="button" class="btn btn-dark">Supprimer</button>
                             </a>
                         </td>

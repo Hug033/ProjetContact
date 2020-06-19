@@ -30,6 +30,9 @@
                 <form th:action="@{/logout}" method="post" th:if="${isConnected}" class="form-inline" >
                     <input class="form-control btn btn-outline-light" type="submit" value="Se déconnecter"/>
                 </form>
+                <form th:action="@{/login}" th:if="${!isConnected}" class="form-inline" >
+                    <input class="form-control btn btn-outline-light" type="submit" value="Se connecter"/>
+                </form>
             </div>
         </nav>
         <div id="container" class="d-flex justify-content-center">

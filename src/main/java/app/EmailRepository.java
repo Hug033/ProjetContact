@@ -10,5 +10,5 @@ public interface EmailRepository extends CrudRepository<Email, Long> {
 
     Email findByEmail(String email);
 
-    Contact findById(long id);
+    Email findById(long id);
 }

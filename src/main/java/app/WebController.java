@@ -72,7 +72,14 @@ public class WebController implements WebMvcConfigurer {
         return null;
     }
 
-    @GetMapping("/user/delete/{id}")
+    @GetMapping("/email/delete/{id}")
+    public String deleteEmail(@PathVariable long id) {
+        Email temp = repoEmail.findById(id);
+        repoEmail.deleteById(id);
+        return "redirect:/contact/detail/" + temp.getContact().getId();
+    }
+
+    @GetMapping("/contact/delete/{id}")
     public String deleteUser(@PathVariable long id) {
         Contact temp = repo.findById(id);
         for(Email e: temp.getEmails()) {
@@ -84,7 +91,7 @@ public class WebController implements WebMvcConfigurer {
         return "redirect:/";
     }
 
-    @GetMapping("/user/edit/{id}")
+    @GetMapping("/contact/edit/{id}")
     public String editUser(@PathVariable long id, Model model, ContactForm contactForm) {
         Contact temp = repo.findById(id);
         contactForm.setFirstName(temp.getFirstName());
@@ -93,10 +100,10 @@ public class WebController implements WebMvcConfigurer {
         contactForm.setLinkImage(temp.getLinkImage());
         contactForm.setPhone(temp.getPhone());
         contactForm.setId(temp.getId());
-        return "userForm";
+        return "contactForm";
     }
 
-    @GetMapping("/user/detail/{id}")
+    @GetMapping("/contact/detail/{id}")
     public String getUserDetail(@PathVariable long id, Model model, EmailForm emailForm, AssignForm assignForm) {
 
         Contact temp = repo.findById(id);
@@ -111,12 +118,12 @@ public class WebController implements WebMvcConfigurer {
         model.addAttribute("contact", temp);
         model.addAttribute("adresses", adresses);
 
-        return "user";
+        return "contact";
     }
 
     @GetMapping("/add")
     public String addContact(ContactForm contactForm) {
-        return "userForm";
+        return "contactForm";
     }
 
     @GetMapping("/add/adress")
@@ -132,14 +139,14 @@ public class WebController implements WebMvcConfigurer {
     public String addUser(@Valid ContactForm contactForm, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
-            return "userForm";
+            return "contactForm";
         }
 
         Contact temp = new Contact(contactForm.getFirstName(), contactForm.getLastName(), contactForm.getPhone(), contactForm.getCivility(), contactForm.getLinkImage());
         repo.save(temp);
         //repoEmail.save(new Email("hugo@hugo.com", temp));
 
-        return "redirect:/user/detail/" + temp.getId();
+        return "redirect:/contact/detail/" + temp.getId();
     }
 
     // Permet d'éditer un contact
@@ -147,7 +154,7 @@ public class WebController implements WebMvcConfigurer {
     public String editUser(@PathVariable long id, @Valid ContactForm contactForm, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return "userForm";
+            return "contactForm";
         }
 
         Contact contactToEdit = repo.findById(contactForm.getId());
@@ -158,7 +165,7 @@ public class WebController implements WebMvcConfigurer {
         contactToEdit.setPhone(contactForm.getPhone());
         repo.save(contactToEdit);
 
-        return "redirect:/user/detail/" + id;
+        return "redirect:/contact/detail/" + id;
     }
 
     // Permet d'ajouter une adresse
@@ -180,7 +187,7 @@ public class WebController implements WebMvcConfigurer {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("contact", repo.findById(id));
-            return "user";
+            return "contact";
         }
 
         Contact temp = repo.findById(id);
@@ -188,7 +195,7 @@ public class WebController implements WebMvcConfigurer {
             repoEmail.save(new Email(emailForm.getEmail(), temp));
         }
 
-        return "redirect:/user/detail/" + temp.getId();
+        return "redirect:/contact/detail/" + temp.getId();
     }
 
     // Permet d'assigner une adresse à un contact
@@ -200,7 +207,7 @@ public class WebController implements WebMvcConfigurer {
         if (bindingResult.hasErrors()) {
             model.addAttribute("contact", repo.findById(id));
             model.addAttribute("emailForm", new EmailForm());
-            return "user";
+            return "contact";
         }
 
         Contact temp = repo.findById(id);
@@ -209,7 +216,7 @@ public class WebController implements WebMvcConfigurer {
         repo.save(temp);
 
         model.addAttribute("emailForm", new EmailForm());
-        return "redirect:/user/detail/" + temp.getId();
+        return "redirect:/contact/detail/" + temp.getId();
     }
 
 
